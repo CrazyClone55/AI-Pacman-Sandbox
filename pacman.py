@@ -10,6 +10,7 @@ class Pacman(Entity):
         self.name = PACMAN
         self.color = YELLOW
         self.direction = LEFT
+        self.setBetweenNodes(LEFT)
         
     def eatPellets(self, pelletList):
         for pellet in pelletList:

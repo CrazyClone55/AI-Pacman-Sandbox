@@ -32,6 +32,7 @@ BLINKY = 4
 PINKY = 5
 INKY = 6
 CLYDE = 7
+FRUIT = 8
 
 LEVEL = "Level1.txt"
 
