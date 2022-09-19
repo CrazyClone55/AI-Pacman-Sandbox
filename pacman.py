@@ -9,7 +9,7 @@ class Pacman(Entity):
         Entity.__init__(self, node)
         self.name = PACMAN
         self.color = YELLOW
-        self.setSpeed(100)
+        self.direction = LEFT
         
     def eatPellets(self, pelletList):
         for pellet in pelletList:

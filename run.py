@@ -4,7 +4,7 @@ from constants import *
 from pacman import Pacman
 from nodes import NodeGroup
 from pellets import PelletGroup
-from ghost import Ghost
+from ghost import GhostGroup
 
 class Controller(object):
     def __init__(self):
@@ -22,7 +22,7 @@ class Controller(object):
             self.pellets.numEaten += 1
             self.pellets.pelletList.remove(pellet)  
             if pellet.name == POWERPELLET:
-               self.ghost.startFright()  
+               self.ghosts.startFright()  
         
     def startGame(self):
         self.setBackground()
@@ -31,10 +31,14 @@ class Controller(object):
         homekey = self.nodes.createHomeNodes(11.5, 14)
         self.nodes.connectHomeNodes(homekey, (12,14), LEFT)
         self.nodes.connectHomeNodes(homekey, (15,14), RIGHT)
-        self.pacman = Pacman(self.nodes.getStartTempNode())
+        self.pacman = Pacman(self.nodes.getNodeFromTiles(15,26))
         self.pellets = PelletGroup(LEVEL)
-        self.ghost = Ghost(self.nodes.getStartTempNode(), self.pacman)
-        self.ghost.setSpawnNode(self.nodes.getNodeFromTiles(2+11.5, 3+14))
+        self.ghosts = GhostGroup(self.nodes.getStartTempNode(), self.pacman)
+        self.ghosts.blinky.setStartNode(self.nodes.getNodeFromTiles(2+11.5, 0+14))
+        self.ghosts.pinky.setStartNode(self.nodes.getNodeFromTiles(2+11.5, 3+14))
+        self.ghosts.inky.setStartNode(self.nodes.getNodeFromTiles(0+11.5, 3+14))
+        self.ghosts.clyde.setStartNode(self.nodes.getNodeFromTiles(4+11.5, 3+14))
+        self.ghosts.setSpawnNode(self.nodes.getNodeFromTiles(2+11.5, 3+14))
     
     def setBackground(self):
         self.background = pygame.surface.Surface(SCREENSIZE).convert()
@@ -43,7 +47,7 @@ class Controller(object):
     def update(self):
         dt = self.clock.tick(30) / 1000.0
         self.pacman.update(dt)
-        self.ghost.update(dt)
+        self.ghosts.update(dt)
         self.pellets.update(dt)
         self.checkPelletEvents()
         self.checkGhostEvents()
@@ -51,16 +55,17 @@ class Controller(object):
         self.render()            
 
     def checkGhostEvents(self):
-        if self.pacman.collideGhost(self.ghost):
-            if self.ghost.mode.current is FRIGHT:
-                self.ghost.startSpawn()
+        for ghost in self.ghosts:
+            if self.pacman.collideGhost(ghost):
+                if ghost.mode.current is FRIGHT:
+                    ghost.startSpawn()
 
     def render(self):
         self.screen.blit(self.background, (0, 0))
         self.nodes.render(self.screen)
         self.pellets.render(self.screen)
         self.pacman.render(self.screen)
-        self.ghost.render(self.screen)
+        self.ghosts.render(self.screen)
         pygame.display.update()
         
     def checkQuit(self):
