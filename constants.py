@@ -27,3 +27,8 @@ POWERPELLET = 2
 GHOST = 3
 
 LEVEL = "Level1.txt"
+
+SCATTER = 0
+CHASE = 1
+FREIGHT = 2
+SPAWN = 3

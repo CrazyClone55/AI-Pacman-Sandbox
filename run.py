@@ -28,7 +28,7 @@ class Controller(object):
         self.nodes.setPortalPair((0,17), (27,17))
         self.pacman = Pacman(self.nodes.getStartTempNode())
         self.pellets = PelletGroup(LEVEL)
-        self.ghost = Ghost(self.nodes.getStartTempNode())
+        self.ghost = Ghost(self.nodes.getStartTempNode(), self.pacman)
     
     def setBackground(self):
         self.background = pygame.surface.Surface(SCREENSIZE).convert()
