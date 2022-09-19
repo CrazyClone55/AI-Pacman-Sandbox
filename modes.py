@@ -33,5 +33,28 @@ class ModeController(object):
 
     def update(self, dt):
         self.mainmode.update(dt)
-        self.current = self.mainmode.mode
+        if self.current is FRIGHT:
+            self.timer += dt
+            if self.timer >= self.time:
+                self.time = 0
+                self.entity.normalMode()
+                self.current = self.mainmode
+        elif self.current in [SCATTER, CHASE]:
+            self.current = self.mainmode.mode
+        if self.current is SPAWN:
+            if self.entity.node is self.entity.spawnNode:
+                self.entity.normalMode()
+                self.current = self.mainmode.mode
+                
+    def setSpawnMode(self):
+        if self.current is FRIGHT:
+            self.current = SPAWN
+        
+    def setFrightMode(self):
+        if self.current in [SCATTER, CHASE]:
+            self.timer = 0
+            self.time = 7
+            self.current = FRIGHT
+        elif self.current is FRIGHT:
+            self. timer = 0
 
