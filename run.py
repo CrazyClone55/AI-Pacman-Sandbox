@@ -4,6 +4,7 @@ from constants import *
 from pacman import Pacman
 from nodes import NodeGroup
 from pellets import PelletGroup
+from ghost import Ghost
 
 class Controller(object):
     def __init__(self):
@@ -27,6 +28,7 @@ class Controller(object):
         self.nodes.setPortalPair((0,17), (27,17))
         self.pacman = Pacman(self.nodes.getStartTempNode())
         self.pellets = PelletGroup(LEVEL)
+        self.ghost = Ghost(self.nodes.getStartTempNode())
     
     def setBackground(self):
         self.background = pygame.surface.Surface(SCREENSIZE).convert()
@@ -35,6 +37,7 @@ class Controller(object):
     def update(self):
         dt = self.clock.tick(30) / 1000.0
         self.pacman.update(dt)
+        self.ghost.update(dt)
         self.pellets.update(dt)
         self.checkPelletEvents()
         self.checkQuit()
@@ -45,6 +48,7 @@ class Controller(object):
         self.nodes.render(self.screen)
         self.pellets.render(self.screen)
         self.pacman.render(self.screen)
+        self.ghost.render(self.screen)
         pygame.display.update()
         
     def checkQuit(self):

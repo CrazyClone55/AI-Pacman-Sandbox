@@ -24,5 +24,6 @@ PORTAL = 3
 PACMAN = 0
 PELLET = 1
 POWERPELLET = 2
+GHOST = 3
 
 LEVEL = "Level1.txt"
