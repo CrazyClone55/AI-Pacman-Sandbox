@@ -6,6 +6,7 @@ from nodes import NodeGroup
 from pellets import PelletGroup
 from ghost import GhostGroup
 from fruit import Fruit
+from pauser import Pause
 
 class Controller(object):
     def __init__(self):
@@ -16,6 +17,21 @@ class Controller(object):
         self.screen = pygame.display.set_mode(SCREENSIZE, 0, 32)
         self.background = None
         self.clock = pygame.time.Clock()
+        self.fruit = None
+        self.pause = Pause(True)
+        self.lives = 5
+        
+    def restartGame(self):
+        self.lives = 5
+        self.level = 0
+        self.pause.paused = True
+        self.fruit = None
+        self.startGame()
+        
+    def resetLevel(self):
+        self.pause.paused = True
+        self.pacman.reset()
+        self.ghosts.reset()
         self.fruit = None
         
     def checkPelletEvents(self):
@@ -48,15 +64,19 @@ class Controller(object):
             
     def update(self):
         dt = self.clock.tick(30) / 1000.0
-        self.pacman.update(dt)
-        self.ghosts.update(dt)
         self.pellets.update(dt)
-        if self.fruit is not None:
-            self.fruit.update(dt)
-        self.checkPelletEvents()
-        self.checkGhostEvents()
-        self.checkFruitEvents()
-        self.checkQuit()
+        if not self.pause.paused:
+            self.pacman.update(dt)
+            self.ghosts.update(dt)        
+            if self.fruit is not None:
+                self.fruit.update(dt)
+            self.checkPelletEvents()
+            self.checkGhostEvents()
+            self.checkFruitEvents()
+        afterPauseMethod = self.pause.update(dt)
+        if afterPauseMethod is not None:
+            afterPauseMethod()
+        self.checkEvents()
         self.render()
         
     def checkFruitEvents(self):
@@ -73,7 +93,19 @@ class Controller(object):
         for ghost in self.ghosts:
             if self.pacman.collideGhost(ghost):
                 if ghost.mode.current is FRIGHT:
+                    self.pacman.visible = False
+                    ghost.visible = False
+                    self.pause.setPause(pauseTime=1, func=self.showEntities)
                     ghost.startSpawn()
+                elif ghost.mode.current is not SPAWN:
+                    if self.pacman.alive:
+                        self.lives -=1
+                        self.pacman.die()
+                        self.ghosts.hide()
+                        if self.lives <= 0:
+                            self.pause.setPause(pauseTime=3, func=self.restartGame)
+                        else:
+                            self.pause.setPause(pauseTime=3, func=self.resetLevel)
 
     def render(self):
         self.screen.blit(self.background, (0, 0))
@@ -85,10 +117,26 @@ class Controller(object):
         self.ghosts.render(self.screen)
         pygame.display.update()
         
-    def checkQuit(self):
+    def checkEvents(self):
         for event in pygame.event.get():
             if event.type == QUIT:
                 exit()
+            elif event.type == KEYDOWN:
+                if event.key == K_SPACE:
+                    if self.pacman.alive:
+                        self.pause.setPause(playerPaused=True)
+                        if not self.pause.paused:
+                            self.showEntities()
+                        else:
+                            self.hideEntities()
+                        
+    def showEntities(self):
+        self.pacman.visible = True
+        self.ghosts.show()
+
+    def hideEntities(self):
+        self.pacman.visible = False
+        self.ghosts.hide()
         
 if __name__ == "__main__":
     game = Controller()
