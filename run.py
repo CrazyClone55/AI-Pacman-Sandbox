@@ -7,6 +7,7 @@ from pellets import PelletGroup
 from ghost import GhostGroup
 from fruit import Fruit
 from pauser import Pause
+from bfspacman import BFSPacman
 
 class Controller(object):
     def __init__(self):
@@ -31,7 +32,7 @@ class Controller(object):
     def resetLevel(self):
         self.pause.paused = True
         self.pacman.reset()
-        self.ghosts.reset()
+        #self.ghosts.reset()
         self.fruit = None
         
     def checkPelletEvents(self):
@@ -40,7 +41,8 @@ class Controller(object):
             self.pellets.numEaten += 1
             self.pellets.pelletList.remove(pellet)  
             if pellet.name == POWERPELLET:
-               self.ghosts.startFright()  
+                small=2
+                #self.ghosts.startFright()  
         
     def startGame(self):
         self.setBackground()
@@ -49,14 +51,16 @@ class Controller(object):
         homekey = self.nodes.createHomeNodes(11.5, 14)
         self.nodes.connectHomeNodes(homekey, (12,14), LEFT)
         self.nodes.connectHomeNodes(homekey, (15,14), RIGHT)
-        self.pacman = Pacman(self.nodes.getNodeFromTiles(15,26))
+        #self.pacman = Pacman(self.nodes.getNodeFromTiles(15,26))
+        self.pacman = BFSPacman(self.nodes.getNodeFromTiles(1,32))
         self.pellets = PelletGroup(LEVEL)
-        self.ghosts = GhostGroup(self.nodes.getStartTempNode(), self.pacman)
-        self.ghosts.blinky.setStartNode(self.nodes.getNodeFromTiles(2+11.5, 0+14))
-        self.ghosts.pinky.setStartNode(self.nodes.getNodeFromTiles(2+11.5, 3+14))
-        self.ghosts.inky.setStartNode(self.nodes.getNodeFromTiles(0+11.5, 3+14))
-        self.ghosts.clyde.setStartNode(self.nodes.getNodeFromTiles(4+11.5, 3+14))
-        self.ghosts.setSpawnNode(self.nodes.getNodeFromTiles(2+11.5, 3+14))
+        self.pacman.breathFirstSearch(self.nodes.getNodeFromTiles(1,32), self.nodes.getNodeFromTiles(26,4))
+        #self.ghosts = GhostGroup(self.nodes.getStartTempNode(), self.pacman)
+        #self.ghosts.blinky.setStartNode(self.nodes.getNodeFromTiles(2+11.5, 0+14))
+        #self.ghosts.pinky.setStartNode(self.nodes.getNodeFromTiles(2+11.5, 3+14))
+        #self.ghosts.inky.setStartNode(self.nodes.getNodeFromTiles(0+11.5, 3+14))
+        #self.ghosts.clyde.setStartNode(self.nodes.getNodeFromTiles(4+11.5, 3+14))
+        #self.ghosts.setSpawnNode(self.nodes.getNodeFromTiles(2+11.5, 3+14))
     
     def setBackground(self):
         self.background = pygame.surface.Surface(SCREENSIZE).convert()
@@ -67,11 +71,11 @@ class Controller(object):
         self.pellets.update(dt)
         if not self.pause.paused:
             self.pacman.update(dt)
-            self.ghosts.update(dt)        
+            #self.ghosts.update(dt)        
             if self.fruit is not None:
                 self.fruit.update(dt)
             self.checkPelletEvents()
-            self.checkGhostEvents()
+            #self.checkGhostEvents()
             self.checkFruitEvents()
         afterPauseMethod = self.pause.update(dt)
         if afterPauseMethod is not None:
@@ -114,7 +118,7 @@ class Controller(object):
         if self.fruit is not None:
             self.fruit.render(self.screen)
         self.pacman.render(self.screen)
-        self.ghosts.render(self.screen)
+        #self.ghosts.render(self.screen)
         pygame.display.update()
         
     def checkEvents(self):
@@ -132,11 +136,11 @@ class Controller(object):
                         
     def showEntities(self):
         self.pacman.visible = True
-        self.ghosts.show()
+        #self.ghosts.show()
 
     def hideEntities(self):
         self.pacman.visible = False
-        self.ghosts.hide()
+        #self.ghosts.hide()
         
 if __name__ == "__main__":
     game = Controller()

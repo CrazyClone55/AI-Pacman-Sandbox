@@ -10,7 +10,6 @@ class Pacman(Entity):
         self.name = PACMAN
         self.color = YELLOW
         self.direction = LEFT
-        self.setBetweenNodes(LEFT)
         self.alive = True
         
     def reset(self):
