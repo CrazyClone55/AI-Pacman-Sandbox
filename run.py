@@ -45,6 +45,8 @@ class Controller(object):
                 #self.ghosts.startFright()  
         
     def startGame(self):
+        
+        #read in locations of these things
         self.setBackground()
         self.nodes = NodeGroup(LEVEL)
         self.nodes.setPortalPair((0,17), (27,17))
@@ -52,9 +54,10 @@ class Controller(object):
         self.nodes.connectHomeNodes(homekey, (12,14), LEFT)
         self.nodes.connectHomeNodes(homekey, (15,14), RIGHT)
         #self.pacman = Pacman(self.nodes.getNodeFromTiles(15,26))
-        self.pacman = BFSPacman(self.nodes.getNodeFromTiles(1,32))
+        self.pacman = BFSPacman(self.nodes.getNodeFromTiles(STARTTILE[0],STARTTILE[1]))
         self.pellets = PelletGroup(LEVEL)
-        self.pacman.breathFirstSearch(self.nodes.getNodeFromTiles(1,32), self.nodes.getNodeFromTiles(26,4))
+        self.pacman.breathFirstSearch(self.nodes.getNodeFromTiles(STARTTILE[0],STARTTILE[1]), self.nodes.getNodeFromTiles(GOALTILE[0],GOALTILE[1]))
+        self.fruit = Fruit(self.nodes.getNodeFromTiles(GOALTILE[0],GOALTILE[1]))
         #self.ghosts = GhostGroup(self.nodes.getStartTempNode(), self.pacman)
         #self.ghosts.blinky.setStartNode(self.nodes.getNodeFromTiles(2+11.5, 0+14))
         #self.ghosts.pinky.setStartNode(self.nodes.getNodeFromTiles(2+11.5, 3+14))
@@ -76,7 +79,7 @@ class Controller(object):
                 self.fruit.update(dt)
             self.checkPelletEvents()
             #self.checkGhostEvents()
-            self.checkFruitEvents()
+            #self.checkFruitEvents()
         afterPauseMethod = self.pause.update(dt)
         if afterPauseMethod is not None:
             afterPauseMethod()

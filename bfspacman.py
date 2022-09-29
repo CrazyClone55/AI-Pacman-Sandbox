@@ -6,18 +6,14 @@ class BFSPacman(Pacman):
         Pacman.__init__(self, node)
         self.direction = STOP
         
-        
-        
-        
-        
     def breathFirstSearch(self,startNode, goalNode):
-        self.queue = self.bFirstSearch(startNode,goalNode)
+        self.queue = self.graphSearcher(startNode,goalNode)
         self.queue.pop(0)
         self.target = self.queue.pop(0)
         self.direction = self.getDirection()
     
         
-    def bFirstSearch(self, startNode, goalNode):
+    def graphSearcher(self, startNode, goalNode):
         queue = []
         self.explored = []
         self.parents = {}
@@ -63,8 +59,11 @@ class BFSPacman(Pacman):
             self.node = self.target
             if self.node.neighbors[PORTAL] is not None:
                 self.node = self.node.neighbors[PORTAL]
-                
-            self.target = self.queue.pop(0)
+               
+            if self.queue:
+                self.target = self.queue.pop(0)
+            else:
+                self.target = self.node
             print(self.target.position/16)
             
             if self.target is not self.node:
