@@ -12,8 +12,8 @@ from bfspacman import BFSPacman
 class Controller(object):
     def __init__(self):
         pygame.init()
-        pygame.mixer.init()
-        pygame.mixer.music.load('song.mp3')
+        #pygame.mixer.init()
+        #pygame.mixer.music.load('song.mp3')
         #pygame.mixer.music.play(-1)
         self.screen = pygame.display.set_mode(SCREENSIZE, 0, 32)
         self.background = None

@@ -1,25 +1,21 @@
-from py import process
 from pacman import Pacman
 from constants import *
-from time import process_time
 
-class BFSPacman(Pacman):
+class DFSPacman(Pacman):
     def __init__(self, node):
         Pacman.__init__(self, node)
         self.direction = STOP
         
-    def breathFirstSearch(self,startNode, goalNode):
-        start_time = process_time()
+    def depthFirstSearch(self,startNode, goalNode):
+        #REWRITE THIS
         self.queue = self.graphSearcher(startNode,goalNode)
-        stop_time = process_time()
-        print(stop_time, start_time)
-        print(stop_time-start_time)
         self.queue.pop(0)
         self.target = self.queue.pop(0)
         self.direction = self.getDirection()
     
         
     def graphSearcher(self, startNode, goalNode):
+        #REWRITE THIS
         queue = []
         self.explored = []
         self.parents = {}
@@ -39,6 +35,7 @@ class BFSPacman(Pacman):
                 
                 
     def givePath(self, start, finish):
+        #REWRITE THIS
         stack = []
         first, last = finish, self.parents[finish]
         while last is not start:
