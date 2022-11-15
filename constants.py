@@ -34,7 +34,7 @@ INKY = 6
 CLYDE = 7
 FRUIT = 8
 
-LEVEL = "Level1.txt"
+LEVEL = "simaneall.txt"
 
 SCATTER = 0
 CHASE = 1

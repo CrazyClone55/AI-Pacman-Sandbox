@@ -1,3 +1,4 @@
+import random
 import pygame
 from vector import Vector2
 from constants import *
@@ -45,15 +46,29 @@ class PelletGroup(object):
     def __init__(self, pelletfile):
         self.pelletList = []
         self.powerpellets = []
-        self.createPelletList(pelletfile)
+        #self.createPelletList(pelletfile)
+        self.generatePelletList(pelletfile)
         self.numEaten = 0
 
     def update(self, dt):
         for powerpellet in self.powerpellets:
             powerpellet.update(dt)
                 
+    def generatePelletList(self, pelletfile):
+        tempList = []
+        data = self.readPelletFile(pelletfile)
+        for row in range(data.shape[0]):
+            for col in range(data.shape[1]):
+                if data[row][col] in ['n']:
+                    tempList.append(Pellet(row,col))
+                    
+        random.shuffle(tempList)
+        
+        for i in range(10):
+            self.pelletList.append(tempList.pop(0))
+                    
     def createPelletList(self, pelletfile):
-        data = self.readPelletfile(pelletfile)        
+        data = self.readPelletFile(pelletfile)        
         for row in range(data.shape[0]):
             for col in range(data.shape[1]):
                 if data[row][col] in ['.', '+']:
@@ -63,7 +78,7 @@ class PelletGroup(object):
                     self.pelletList.append(pp)
                     self.powerpellets.append(pp)
                     
-    def readPelletfile(self, textfile):
+    def readPelletFile(self, textfile):
         return np.loadtxt(textfile, dtype='<U1')
     
     def isEmpty(self):

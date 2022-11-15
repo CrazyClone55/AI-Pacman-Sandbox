@@ -3,15 +3,16 @@ from constants import *
 class MainMode(object):
     def __init__(self):
         self.timer = 0
-        self.scatter()
+        self.chase() #self.scatter()
         
     def update(self, dt):
         self.timer += dt
-        if self.timer >= self.time:
-            if self.mode is SCATTER:
-                self.chase()
-            elif self.mode is CHASE:
-                self.scatter()
+        
+        #if self.timer >= self.time:
+        #    if self.mode is SCATTER:
+        #        self.chase()
+        #    elif self.mode is CHASE:
+        #       self.scatter()
         
     def scatter(self):
         self.mode = SCATTER
@@ -38,7 +39,7 @@ class ModeController(object):
             if self.timer >= self.time:
                 self.time = 0
                 self.entity.normalMode()
-                self.current = self.mainmode
+                self.current = self.mainmode.mode
         elif self.current in [SCATTER, CHASE]:
             self.current = self.mainmode.mode
         if self.current is SPAWN:

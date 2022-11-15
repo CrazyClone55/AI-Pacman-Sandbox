@@ -106,10 +106,10 @@ class Entity(object):
     def randomDirection(self, directions):
         return directions[randint(0, len(directions)-1)]
     
-    def goalDirection(self, directions):
+    def greedyAlgorithm(self, directions): #TODO add portal case
         distances = []
         for direction in directions:
-            vec = self.node.position + self.directions[direction]*TILEWIDTH - self.goal
+            vec = self.node.position + self.directions[direction]*TILEWIDTH - self.goal.position
             distances.append(vec.magnitudeSquared())
         index = distances.index(min(distances))
         return directions[index]
