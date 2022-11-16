@@ -1,5 +1,5 @@
 from controller import Controller
-from GA import Simulation
+from Simulation.GA import Simulation
 
 if __name__ == "__main__":
     simulation = Simulation()
