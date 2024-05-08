@@ -1,6 +1,10 @@
-Pacman game written in python using pygame
-implements a number of different Machine Learning and AI concepts for both the ghosts and pacman
-currently set to generate a solution for the travelling salesman problem using simulated annealing
+This repository is a collection of methods of implementing differrent Artificial Intelligence and Machine Learning concepts within Pacman.
+This was completeted throuhout my senior year of high school in an Artificial Intelligence Class.
+
+All code is in python
+the Visual elements of the game are written using pygame.
+
+the AI and ML concepts are used for both the Ghosts as well as Pacman. Currently, it is configured to use simulated annealing to solve the travelling salesman problem.
 
 Usage:
 RUN run.py
